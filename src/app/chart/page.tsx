@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/chart";
 import { expenseData } from "@/mock/expense-data";
 import { generateShades } from "@/utils/color-generator";
+import { generateColorsBasedOnExpenses } from "@/utils/color-generator-v2";
 
 export const description = "A donut chart with text";
 
@@ -63,8 +64,9 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function ChartPieDonutText() {
+  // const getColors = generateShades("#193cb8", 10);
 
-    const getColors = generateShades("#193cb8", 10);
+  const newColors = generateColorsBasedOnExpenses(expenseChartData.expenses);
 
   const totalSpent = React.useMemo(() => {
     return expenseChartData.expenses.reduce((acc, curr) => acc + curr.spent, 0);
@@ -74,10 +76,10 @@ export default function ChartPieDonutText() {
     return expenseChartData.incomes.reduce((acc, curr) => acc + curr.amount, 0);
   }, [expenseChartData.incomes]);
 
-   const pieData = expenseChartData.expenses.map((expense, idx) => ({
+  const pieData = expenseChartData.expenses.map((expense, idx) => ({
     name: expense.title,
     spent: expense.spent,
-    fill: getColors[idx] || "var(--default-color)",
+    fill: newColors[idx] || "var(--default-color)",
   }));
 
   return (
