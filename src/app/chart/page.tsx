@@ -21,16 +21,9 @@ import {
 import { expenseData } from "@/mock/expense-data";
 import { generateShades } from "@/utils/color-generator";
 import { generateColorsBasedOnExpenses } from "@/utils/color-generator-v2";
+import { generateColorPalette } from "@/utils/colors-with-chroma";
 
 export const description = "A donut chart with text";
-
-// const chartData = [
-//   { expense: "chrome", amount: 275, fill: "var(--color-chrome)" },
-//   { expense: "safari", amount: 200, fill: "var(--color-safari)" },
-//   { expense: "firefox", amount: 287, fill: "var(--color-firefox)" },
-//   { expense: "edge", amount: 173, fill: "var(--color-edge)" },
-//   { expense: "other", amount: 190, fill: "var(--color-other)" },
-// ];
 
 const expenseChartData = {
   incomes: expenseData.incomes,
@@ -64,10 +57,15 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function ChartPieDonutText() {
-  // const getColors = generateShades("#193cb8", 10);
+  const getColors = generateShades("#193cb8", 8);
 
-  const newColors = generateColorsBasedOnExpenses(expenseChartData.expenses);
+  const initialColor = "#3498db"; // Your base color
+  const size = 3; // Number of colors you want to generate
+  const colorPalette = generateColorPalette(initialColor, size);
+  
+  console.log("colorPalette", colorPalette)
 
+  // const newColors = generateColorsBasedOnExpenses(expenseChartData.expenses);
   const totalSpent = React.useMemo(() => {
     return expenseChartData.expenses.reduce((acc, curr) => acc + curr.spent, 0);
   }, [expenseChartData.expenses]);
@@ -79,7 +77,7 @@ export default function ChartPieDonutText() {
   const pieData = expenseChartData.expenses.map((expense, idx) => ({
     name: expense.title,
     spent: expense.spent,
-    fill: newColors[idx] || "var(--default-color)",
+    fill: colorPalette[idx%size] || "var(--default-color)",
   }));
 
   return (

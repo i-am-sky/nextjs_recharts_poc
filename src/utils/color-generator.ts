@@ -5,8 +5,11 @@ export function generateShades(baseColor: string, numShades: number): string[] {
   const step = 1 / (numShades - 1);
 
   for (let i = 0; i < numShades; i++) {
+    const brightnessAdjustment = i * step * 100;
+    const saturationAdjustment = i * step * 100;
     const shade = tinycolor(baseColor)
-      .lighten(i * step * 100)
+      .lighten(brightnessAdjustment)
+      .desaturate(saturationAdjustment)
       .toHexString();
     shades.push(shade);
   }
